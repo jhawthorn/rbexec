@@ -1,24 +1,27 @@
 # Rbexec
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rbexec`. To experiment with that code, run `bin/console` for an interactive prompt.
+Run code inside an existing ruby process. Similar to `rbtrace -p $pid -e '...'`, but more reliable.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add rbexec
 
 ## Usage
 
-TODO: Write usage instructions here
+During the boot of the process you would like to execute code in (ex. config/puma.rb)
+
+```
+require "rbexec"
+Rbexec::Listener.new(path: "tmp/puma.rbexec.sock")
+```
+
+This creates a socket which can be written to.
+
+```
+$ echo "GC.stat" | socat - UNIX-CONNECT:tmp/puma.rbexec.sock
+rbexec pid:1176594. Enter code followed by EOF.
+{:count=>57, :time=>741, ...
+```
 
 ## Development
 
